@@ -24,7 +24,7 @@ const bodyElement        = document.getElementById("body")
 const roundTimer = { elapsedTime: 0 }
 let currentRound = 1
 let timerState   = STATE.IDLE
-const roundEndBell = new Audio('../bell.mp3')
+const roundEndBell = new Audio('./bell.mp3')
 
 // --- Event listeners ---
 timerButtonElement.addEventListener('click', () => timerButtonWasClicked())
