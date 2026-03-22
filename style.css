@@ -1,0 +1,154 @@
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  animation-name: startAnimation;
+  animation-duration: 1s;
+}
+
+.container {
+  width: 100%;
+  margin: auto;
+  display: block;
+  text-align: center;
+  font-size: xxx-large;
+}
+
+.red   { background: red;        color: white;     }
+.white { background: white;      color: black;     }
+.green { background: lightgreen; color: darkgreen; }
+
+.xxxlarge-t { font-size: xxx-large; }
+.center-t   { text-align: center;   }
+.form-container {
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  box-sizing: border-box;
+  background-color: red;
+}
+form {
+  background-color: red;
+  color: white;
+  padding: 24px;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  text-align: center;
+  font-size: xxx-large !important;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+label {
+  display: block;
+  margin-top: 1.2rem;
+  margin-bottom: 0.2rem;
+  color: white;
+}
+
+input[type=number] {
+  width: 100%;
+  height: 5.5rem;
+  padding: 12px;
+  margin: 6px 0;
+  display: inline-block;
+  border: 3px solid white;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: xx-large;
+  background-color: white;
+  color: darkred;
+  text-align: center;
+}
+
+input[type=number]:focus {
+  outline: none;
+  border-color: lightgreen;
+  background-color: #f0fff0;
+}
+
+#submit-button {
+  width: 100%;
+  height: 6rem;
+  background-color: lightgreen;
+  color: darkgreen;
+  padding: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: xx-large;
+  font-weight: bold;
+  margin-top: 1.5rem;
+  box-sizing: border-box;
+}
+
+#submit-button:hover { background-color: #90ee90; }
+
+button {
+  width: 45%;
+  height: 5.5rem;
+  border: none;
+  font-size: xx-large;
+  margin: 0.5rem;
+  border-radius: 5px;
+  background-color: lightgreen;
+  color: darkgreen;
+  font-weight: bold;
+}
+
+button:active { opacity: 0.85; }
+
+#reset-button {
+  background-color: white;
+  color: darkred;
+}
+
+
+
+.time-input-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 6px 0;
+}
+
+.time-field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.time-field label {
+  font-size: large;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 0;
+  margin-bottom: 4px;
+}
+
+.time-sep {
+  font-size: xxx-large;
+  color: white;
+  padding-bottom: 0.5rem;
+}
+
+@keyframes startAnimation {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+#prev-round-button,
+#next-round-button,
+#settings-button {
+  background-color: white;
+  color: darkred;
+

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<title>Round Timer</title>
+<link rel="stylesheet" href="style.css">
+<body id="body" class="red">
+
+  <div class="form-container">
+    <form id="settings-form">
+      <label for="rounds">Number of Rounds</label>
+      <input type="number" id="rounds" name="rounds" min="1" placeholder="5">
+
+      <label>Round Length</label>
+      <div class="time-input-group">
+        <div class="time-field">
+          <label for="round-min">min</label>
+          <input type="number" id="round-min" min="0" max="59" placeholder="2">
+        </div>
+        <span class="time-sep">:</span>
+        <div class="time-field">
+          <label for="round-sec">sec</label>
+          <input type="number" id="round-sec" min="0" max="59" placeholder="00">
+        </div>
+      </div>
+
+      <label>Rest Length</label>
+      <div class="time-input-group">
+        <div class="time-field">
+          <label for="rest-min">min</label>
+          <input type="number" id="rest-min" min="0" max="59" placeholder="0">
+        </div>
+        <span class="time-sep">:</span>
+        <div class="time-field">
+          <label for="rest-sec">sec</label>
+          <input type="number" id="rest-sec" min="0" max="59" placeholder="30">
+        </div>
+      </div>
+
+      <button id="submit-button" type="button">Set</button>
+    </form>
+  </div>
+
+<div class="container" id="timer-container" style="display: none;">
+  <div><h3>Round Timer</h3></div>
+  <div><p id="round-text">Round 1</p></div>
+  <div><h1 id="time">00:00</h1></div>
+
+<div>
+  <button id="prev-round-button">&#8592; Round</button>
+  <button id="next-round-button">Round &#8594;</button>
+</div>
+<div>
+  <button id="timer-button">Start</button>
+  <button id="settings-button">&#9881; Settings</button>
+</div>
+</div>
+
+</body>
+<script src="timer.js"></script>
+</html>

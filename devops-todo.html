@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Round Timer — DevOps Roadmap</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@300;400;600;700&display=swap');
+
+  :root {
+    --bg: #0d0f12;
+    --surface: #161a20;
+    --surface2: #1e2330;
+    --border: #2a3040;
+    --accent: #4ade80;
+    --accent2: #22d3ee;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --done-bg: #0f2818;
+    --done-border: #1a4028;
+    --done-text: #4ade80;
+    --warn: #fbbf24;
+    --tag-bg: #1e2d3d;
+    --tag-text: #22d3ee;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem 1.5rem;
+  }
+
+  .header {
+    max-width: 720px;
+    margin: 0 auto 2.5rem;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .project-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    background: var(--tag-bg);
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid #1e3a4a;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  .subtitle {
+    font-size: 0.88rem;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  .progress-bar-wrap {
+    max-width: 720px;
+    margin: 0 auto 2rem;
+  }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .progress-label span:last-child { color: var(--accent); }
+
+  .progress-track {
+    height: 4px;
+    background: var(--surface2);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .todos {
+    max-width: 720px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .phase-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 1.2rem 0 0.5rem;
+    border-top: 1px solid var(--border);
+    margin-top: 0.5rem;
+  }
+
+  .phase-label:first-of-type { border-top: none; margin-top: 0; }
+
+  .todo {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    user-select: none;
+  }
+
+  .todo:hover { border-color: #3a4560; background: var(--surface2); }
+
+  .todo.done {
+    background: var(--done-bg);
+    border-color: var(--done-border);
+  }
+
+  .todo.done .todo-title { color: var(--done-text); text-decoration: line-through; text-decoration-color: #2d6e4a; }
+  .todo.done .todo-note { color: #2d6e4a; }
+  .todo.done .num { color: #2d6e4a; border-color: #2d6e4a; }
+
+  .checkbox {
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  .todo.done .checkbox {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .check-icon {
+    display: none;
+    width: 10px;
+    height: 7px;
+    border-left: 2px solid #0d0f12;
+    border-bottom: 2px solid #0d0f12;
+    transform: rotate(-45deg) translate(1px, -1px);
+  }
+
+  .todo.done .check-icon { display: block; }
+
+  .todo-body { flex: 1; min-width: 0; }
+
+  .todo-top {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .todo-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+    transition: color 0.15s;
+    line-height: 1.4;
+  }
+
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.05em;
+    padding: 1px 7px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .tag-infra { background: #1e1a2d; color: #a78bfa; border: 1px solid #2e2545; }
+  .tag-app   { background: #1a1e2d; color: var(--accent2); border: 1px solid #1e2e45; }
+  .tag-ci    { background: #1a2318; color: var(--accent); border: 1px solid #1e3525; }
+  .tag-deploy{ background: #2d1e18; color: #fb923c; border: 1px solid #452518; }
+  .tag-polish{ background: #2d1e2a; color: #e879f9; border: 1px solid #451835; }
+
+  .todo-note {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-weight: 300;
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  .stats {
+    max-width: 720px;
+    margin: 2rem auto 0;
+    display: flex;
+    gap: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+
+  .stats span { color: var(--text); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="project-tag">round-timer</div>
+    <h1>DevOps Roadmap</h1>
+  </div>
+  <div class="subtitle">End-to-end CI/CD pipeline · GitHub → Jenkins → AWS ECS</div>
+</div>
+
+<div class="progress-bar-wrap">
+  <div class="progress-label">
+    <span>Overall progress</span>
+    <span id="pct">0%</span>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="fill" style="width:0%"></div>
+  </div>
+</div>
+
+<div class="todos" id="todos"></div>
+
+<div class="stats">
+  <span id="done-count">0</span>&nbsp;done &nbsp;/&nbsp; <span id="total-count">0</span>&nbsp;total
+</div>
+
+<script>
+const items = [
+  {
+    phase: "App — Fix",
+    tasks: [
+      { id:1,  title: "Fix bell sound in Docker", note: "Audio files can't load from relative paths in a container. Embed bell.mp3 as a base64 data URI in the JS, or serve it from a /static route and reference the full path.", tag: "app" },
+    ]
+  },
+  {
+    phase: "Infra — Accounts & Repos",
+    tasks: [
+      { id:2,  title: "Set up AWS account", note: "Create IAM user with programmatic access, enable MFA on root, set billing alerts. Note down Access Key ID + Secret for later Jenkins credentials.", tag: "infra" },
+      { id:3,  title: "Create GitHub repository", note: "Push the current codebase. Add a .gitignore for node_modules and any local env files. Decide on branch strategy (main/develop or just main).", tag: "infra" },
+      { id:4,  title: "Configure GitHub webhook", note: "In repo Settings → Webhooks, point to http://<jenkins-host>/github-webhook/. Set Content-Type to application/json and trigger on push events to master/main.", tag: "ci" },
+    ]
+  },
+  {
+    phase: "CI — Jenkins",
+    tasks: [
+      { id:5,  title: "Get Jenkins running", note: "Run Jenkins in Docker (docker run -p 8080:8080 jenkins/jenkins:lts) or on an EC2 t3.micro. Install suggested plugins plus Docker Pipeline and GitHub Integration.", tag: "ci" },
+      { id:6,  title: "Jenkinsfile: build Docker image on master commits", note: "Write a declarative Jenkinsfile with stages: Checkout → Build image (docker build -t round-timer:${BUILD_NUMBER} .) → Push to ECR. Store AWS creds as Jenkins credentials.", tag: "ci" },
+    ]
+  },
+  {
+    phase: "CD — AWS Deploy",
+    tasks: [
+      { id:7,  title: "Add deploy job to AWS ECS", note: "Create an ECS cluster (Fargate, free tier friendly). Add a Jenkins stage that runs 'aws ecs update-service --force-new-deployment'. Store task definition in repo as task-def.json.", tag: "deploy" },
+      { id:8,  title: "Set up a cheap domain", note: "Register a .com/.dev on Route 53 (~$12/yr) or use a free subdomain via freenom. Point an A record or ALB alias at the ECS service's load balancer.", tag: "infra" },
+      { id:9,  title: "Wire everything together", note: "End-to-end smoke test: push a commit → webhook fires → Jenkins builds → image pushed to ECR → ECS deploys → live at domain. Fix any IAM permission gaps.", tag: "deploy" },
+    ]
+  },
+  {
+    phase: "Polish",
+    tasks: [
+      { id:10, title: "Final bug hunt & polish", note: "Test all timer states (start, pause, rest, next round, done). Check mobile layout. Verify the bell fires correctly in the container. Review CSS for any rough edges.", tag: "polish" },
+      { id:11, title: "Finish & document the project", note: "Write a README with architecture diagram, CI/CD flow, and local dev instructions. This becomes your DevOps portfolio piece — make the README shine.", tag: "polish" },
+    ]
+  }
+];
+
+const tagClass = { app:'tag-app', infra:'tag-infra', ci:'tag-ci', deploy:'tag-deploy', polish:'tag-polish' };
+const tagLabel  = { app:'app', infra:'infra', ci:'ci/cd', deploy:'deploy', polish:'polish' };
+
+const state = JSON.parse(localStorage.getItem('rt-devops-todos') || '{}');
+const container = document.getElementById('todos');
+
+let totalCount = 0;
+
+items.forEach(phase => {
+  const ph = document.createElement('div');
+  ph.className = 'phase-label';
+  ph.textContent = phase.phase;
+  container.appendChild(ph);
+
+  phase.tasks.forEach(t => {
+    totalCount++;
+    const el = document.createElement('div');
+    el.className = 'todo' + (state[t.id] ? ' done' : '');
+    el.innerHTML = `
+      <div class="checkbox"><div class="check-icon"></div></div>
+      <div class="todo-body">
+        <div class="todo-top">
+          <span class="num">${String(t.id).padStart(2,'0')}</span>
+          <span class="todo-title">${t.title}</span>
+          <span class="tag ${tagClass[t.tag]}">${tagLabel[t.tag]}</span>
+        </div>
+        <div class="todo-note">${t.note}</div>
+      </div>`;
+    el.addEventListener('click', () => {
+      state[t.id] = !state[t.id];
+      el.classList.toggle('done', state[t.id]);
+      localStorage.setItem('rt-devops-todos', JSON.stringify(state));
+      updateProgress();
+    });
+    container.appendChild(el);
+  });
+});
+
+document.getElementById('total-count').textContent = totalCount;
+
+function updateProgress() {
+  const done = Object.values(state).filter(Boolean).length;
+  const pct = Math.round((done / totalCount) * 100);
+  document.getElementById('fill').style.width = pct + '%';
+  document.getElementById('pct').textContent = pct + '%';
+  document.getElementById('done-count').textContent = done;
+}
+
+updateProgress();
+</script>
+</body>
+</html>
